@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  installer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Shellcheck install scripts
+        run: shellcheck -x install.sh lib/wizard.sh
+      - name: Validate compose file
+        run: |
+          cp .env.template .env
+          # Minimal placeholders so compose config resolves
+          printf '\nAPP_URL=https://api.example.com\nFRONTEND_URL=https://app.example.com\nDB_PASSWORD=ci\n' >> .env
+          docker compose -f docker-compose.yml config >/dev/null
+      - name: Wizard helpers syntax
+        run: bash -n install.sh && bash -n lib/wizard.sh

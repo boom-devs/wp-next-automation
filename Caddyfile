@@ -1,0 +1,13 @@
+# Replace api.example.com / app.example.com via install or edit after wizard.
+# install.sh can sed-replace these hosts from APP_URL / FRONTEND_URL.
+
+{$API_HOST:api.example.com} {
+	reverse_proxy portal:80
+	handle_path /app/* {
+		reverse_proxy reverb:8080
+	}
+}
+
+{$DASHBOARD_HOST:app.example.com} {
+	reverse_proxy dashboard:3000
+}
