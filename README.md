@@ -141,7 +141,7 @@ cp .env.template .env
 | **Orchestrator** | Shell (`install.sh`), Make, Docker Compose | Interactive installer, health checks, secrets generation, and reverse proxy setup. |
 | **Backend Portal** | Laravel 12, Octane, Queue Workers | Core REST API, Coolify orchestrator, GitHub synchronizer, and Stripe cashier. |
 | **Dashboard** | Next.js 14/15, Tailwind CSS | Modern administrative SPA for managing sites, integrations, users, and plans. |
-| **Connector** | WordPress Plugin (`wp-next-connector`) | Installed automatically on client WordPress sites to handle sync webhooks and tokens. |
+| **Connector** | WordPress Plugin (`wp-next-connector`) | Installed automatically on client WordPress sites to handle sync webhooks and tokens. See [Connector Guide](docs/CONNECTOR_PLUGIN.md). |
 | **Realtime Engine**| Laravel Reverb | High-performance WebSocket server for live site provisioning and sync progress. |
 | **Database & Cache**| MySQL 8.0 & Redis Alpine | Encrypted platform settings, tenant records, and background queue handling. |
 

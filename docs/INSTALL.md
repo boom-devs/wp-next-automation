@@ -167,7 +167,7 @@ AWN_PLUGIN_GITHUB_REF=main
 
 **Private fork:** fork the connector into your org, connect a token that can read it, set that `owner/repo`.
 
-If auto-install fails, upload the zip manually in WP Admin and ensure `awn_api_token` matches the site sync token.
+If auto-install fails, upload the zip manually in WP Admin and ensure `awn_api_token` matches the site sync token. See the complete [Connector Plugin Guide](CONNECTOR_PLUGIN.md) for step-by-step pairing and troubleshooting.
 
 ### 3.4 Stripe (optional)
 
