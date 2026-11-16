@@ -715,8 +715,10 @@ main() {
 
   if [ "$NONINTERACTIVE" -eq 1 ]; then
     [ -f "$ENV_FILE_ARG" ] || { echo "Env file not found: $ENV_FILE_ARG"; exit 1; }
+    set -a
     # shellcheck disable=SC1090
-    set -a; source "$ENV_FILE_ARG"; set +a
+    source "$ENV_FILE_ARG"
+    set +a
     INSTALL_DIR="${INSTALL_DIR:-$INSTALL_DIR_DEFAULT}"
     APP_URL="${APP_URL:?APP_URL required}"
     FRONTEND_URL="${FRONTEND_URL:?FRONTEND_URL required}"
@@ -735,8 +737,10 @@ main() {
       RECONFIGURE=1
     else
       INSTALL_DIR="$INSTALL_DIR_DEFAULT"
+      set -a
       # shellcheck disable=SC1091
-      set -a; source "$INSTALL_DIR/.env"; set +a
+      source "$INSTALL_DIR/.env"
+      set +a
       copy_stack_files
       start_stack
       print_done
