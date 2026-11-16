@@ -1,0 +1,46 @@
+# .github/labeler.yml
+# Path-based auto-labeler configuration for WP Next Automation
+
+'focus: installer':
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'install.sh'
+          - 'lib/**/*'
+          - 'Makefile'
+
+'focus: docker':
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'docker-compose*.yml'
+          - 'Caddyfile'
+
+'focus: backend':
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'apps/portal/**/*'
+          - 'frontis-cloud-portal/**/*'
+
+'focus: dashboard':
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'apps/dashboard/**/*'
+          - 'wp-next-automation-dashboard/**/*'
+
+'focus: connector':
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'packages/wp-next-connector/**/*'
+          - 'plugins/**/*'
+
+'focus: ci-cd':
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**/*'
+
+'type: documentation':
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**/*'
+          - 'AGENTS.md'
+          - 'LICENSE'

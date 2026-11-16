@@ -1,0 +1,141 @@
+name: Pull Request Automation & Labeler
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  path-based-labeler:
+    name: Path-Based Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Apply Path Labels
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+          sync-labels: false
+
+  smart-automation:
+    name: Metadata, Size & Contributor Welcome
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Intelligent PR Triage
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+            const title = pr.title;
+            const action = context.payload.action;
+            const labelsToAdd = new Set();
+            const labelsToRemove = new Set();
+            const maintainers = ['EnamulHaq', 'noruzzamans', 'boom-devs'];
+
+            // 1. Auto-assign PR author on open
+            if ((action === 'opened' || action === 'reopened') && (!pr.assignees || pr.assignees.length === 0)) {
+              try {
+                await github.rest.issues.addAssignees({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  assignees: [author]
+                });
+              } catch (err) {
+                console.log(`Could not assign author @${author}: ${err.message}`);
+              }
+            }
+
+            // 2. External community contributor detection & warm welcome
+            if (!maintainers.includes(author)) {
+              labelsToAdd.add('type: community contribution');
+
+              if (action === 'opened') {
+                const { data: comments } = await github.rest.issues.listComments({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number
+                });
+
+                const alreadyWelcomed = comments.some(c => c.body && c.body.includes('Welcome to WP Next Automation!'));
+                if (!alreadyWelcomed) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: pr.number,
+                    body: `👋 **Welcome to WP Next Automation, @${author}!**\n\nThank you for opening this Pull Request! Our maintainers (@EnamulHaq and @noruzzamans) have been notified and will review your changes shortly.\n\n### 🧪 Quick Verification Checklist\n- [ ] Did you run \`make lint\` to ensure ShellCheck passes?\n- [ ] Did you ensure no private secrets or \`.env\` keys are committed?\n\nHappy hacking! 🚀`
+                  });
+                }
+              }
+            }
+
+            // 3. Conventional Commits title parser
+            if (/^fix(\(.*\))?:/i.test(title)) labelsToAdd.add('type: bug');
+            if (/^feat(\(.*\))?:/i.test(title)) labelsToAdd.add('type: enhancement');
+            if (/^refactor(\(.*\))?:/i.test(title)) labelsToAdd.add('type: architecture');
+            if (/^perf(\(.*\))?:/i.test(title)) labelsToAdd.add('type: performance');
+            if (/^sec(urity)?(\(.*\))?:/i.test(title)) labelsToAdd.add('type: security');
+            if (/^docs(\(.*\))?:/i.test(title)) labelsToAdd.add('type: documentation');
+            if (/^(ci|test|chore)(\(.*\))?:/i.test(title)) labelsToAdd.add('focus: ci-cd');
+
+            // 4. Initial review status on PR open
+            if (action === 'opened' || action === 'reopened') {
+              labelsToAdd.add('needs: review');
+            }
+
+            // 5. PR Size Labeling (lines added + deleted)
+            const totalChanges = (pr.additions || 0) + (pr.deletions || 0);
+            let targetSizeLabel = 'size: S';
+            if (totalChanges < 10) targetSizeLabel = 'size: XS';
+            else if (totalChanges < 50) targetSizeLabel = 'size: S';
+            else if (totalChanges < 250) targetSizeLabel = 'size: M';
+            else if (totalChanges < 1000) targetSizeLabel = 'size: L';
+            else targetSizeLabel = 'size: XL';
+
+            const allSizeLabels = ['size: XS', 'size: S', 'size: M', 'size: L', 'size: XL'];
+            const currentLabels = (pr.labels || []).map(l => l.name);
+
+            for (const s of allSizeLabels) {
+              if (s !== targetSizeLabel && currentLabels.includes(s)) {
+                labelsToRemove.add(s);
+              }
+            }
+            labelsToAdd.add(targetSizeLabel);
+
+            // Apply label additions
+            const finalAdditions = Array.from(labelsToAdd).filter(l => !currentLabels.includes(l));
+            if (finalAdditions.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: finalAdditions
+              });
+            }
+
+            // Apply label removals
+            for (const label of labelsToRemove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: label
+                });
+              } catch (err) {
+                // Ignore if already removed
+              }
+            }

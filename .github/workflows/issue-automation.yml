@@ -1,0 +1,86 @@
+name: Issue Automation & Labeler
+
+on:
+  issues:
+    types: [opened, edited]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  auto-label-issue:
+    name: Auto-Label Issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply Intelligent Issue Labels
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            const author = issue.user.login;
+            const action = context.payload.action;
+            const title = issue.title;
+            const labelsToAdd = new Set();
+            const maintainers = ['EnamulHaq', 'noruzzamans', 'boom-devs'];
+
+            // 0. Auto-assign issue author or fallback to maintainers
+            if (action === 'opened' && (!issue.assignees || issue.assignees.length === 0)) {
+              if (maintainers.includes(author)) {
+                try {
+                  await github.rest.issues.addAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    assignees: [author]
+                  });
+                } catch (err) {
+                  console.log(`Could not assign author: ${err.message}`);
+                }
+              } else {
+                try {
+                  await github.rest.issues.addAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    assignees: ['EnamulHaq', 'noruzzamans']
+                  });
+                } catch (err) {
+                  console.log(`Could not assign maintainers: ${err.message}`);
+                }
+              }
+            }
+
+            // 1. Conventional Commits prefix parser
+            if (/^fix(\(.*\))?:/i.test(title)) labelsToAdd.add('type: bug');
+            if (/^feat(\(.*\))?:/i.test(title)) labelsToAdd.add('type: enhancement');
+            if (/^docs(\(.*\))?:/i.test(title)) labelsToAdd.add('type: documentation');
+            if (/^(ci|chore|test)(\(.*\))?:/i.test(title)) labelsToAdd.add('focus: ci-cd');
+
+            // 2. Keyword-based focus labeling
+            const text = (title + ' ' + (issue.body || '')).toLowerCase();
+            if (text.includes('coolify')) labelsToAdd.add('focus: coolify');
+            if (text.includes('docker') || text.includes('compose') || text.includes('caddy')) labelsToAdd.add('focus: docker');
+            if (text.includes('install') || text.includes('install.sh') || text.includes('wizard')) labelsToAdd.add('focus: installer');
+            if (text.includes('connector') || text.includes('plugin') || text.includes('sync')) labelsToAdd.add('focus: connector');
+            if (text.includes('dashboard') || text.includes('next.js') || text.includes('frontend')) labelsToAdd.add('focus: dashboard');
+            if (text.includes('backend') || text.includes('laravel') || text.includes('artisan') || text.includes('reverb')) labelsToAdd.add('focus: backend');
+
+            // Apply labels
+            const currentLabels = (issue.labels || []).map(l => l.name);
+            const finalAdditions = Array.from(labelsToAdd).filter(l => !currentLabels.includes(l));
+
+            if (finalAdditions.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: finalAdditions
+              });
+              console.log(`Added labels to issue #${issue.number}: ${finalAdditions.join(', ')}`);
+            }

@@ -1,0 +1,37 @@
+{
+  "projectName": "wp-next-automation",
+  "projectOwner": "boom-devs",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "EnamulHaq",
+      "name": "Md. Enamul Haq",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35990207?v=4",
+      "profile": "https://github.com/EnamulHaq",
+      "contributions": [
+        "code",
+        "infra",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "noruzzamans",
+      "name": "Md. Noruzzaman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46926901?v=4",
+      "profile": "https://github.com/noruzzamans",
+      "contributions": [
+        "code",
+        "doc",
+        "review",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
