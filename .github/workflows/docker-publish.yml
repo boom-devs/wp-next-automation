@@ -1,0 +1,142 @@
+name: Build & Publish Docker Images to GHCR
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag to publish (e.g. 1.0.0, latest, beta)'
+        required: false
+        default: 'latest'
+      push:
+        description: 'Push images to GHCR (false for dry-run)'
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE_NAME: boom-devs/wp-next-automation-backend
+  DASHBOARD_IMAGE_NAME: boom-devs/wp-next-automation-dashboard
+
+jobs:
+  publish-backend:
+    name: Build & Publish Backend (Portal)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Control Plane Repo
+        uses: actions/checkout@v7
+
+      - name: Checkout Backend Source
+        uses: actions/checkout@v7
+        with:
+          repository: boom-devs/frontis-portal
+          ref: wp-next-automation
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: backend-source
+        continue-on-error: true
+
+      - name: Set up QEMU (Multi-Arch)
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.push }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Backend Docker Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=${{ inputs.image_tag || 'latest' }}
+            type=sha,format=short
+
+      - name: Build & Push Backend Docker Image
+        if: hashFiles('backend-source/Dockerfile') != ''
+        uses: docker/build-push-action@v6
+        with:
+          context: backend-source
+          file: backend-source/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'workflow_dispatch' || inputs.push }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  publish-dashboard:
+    name: Build & Publish Dashboard (Next.js)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Control Plane Repo
+        uses: actions/checkout@v7
+
+      - name: Checkout Dashboard Source (if available)
+        uses: actions/checkout@v7
+        with:
+          repository: boom-devs/wp-next-automation-dashboard
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: dashboard-source
+        continue-on-error: true
+
+      - name: Set up QEMU (Multi-Arch)
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.push }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Dashboard Docker Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.DASHBOARD_IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=${{ inputs.image_tag || 'latest' }}
+            type=sha,format=short
+
+      - name: Build & Push Dashboard Docker Image
+        if: hashFiles('dashboard-source/Dockerfile') != ''
+        uses: docker/build-push-action@v6
+        with:
+          context: dashboard-source
+          file: dashboard-source/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'workflow_dispatch' || inputs.push }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
