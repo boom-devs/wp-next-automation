@@ -75,7 +75,7 @@ jobs:
 
       - name: Build & Push Backend Docker Image
         if: hashFiles('backend-source/Dockerfile') != ''
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: backend-source
           file: backend-source/Dockerfile
@@ -130,7 +130,7 @@ jobs:
 
       - name: Build & Push Dashboard Docker Image
         if: hashFiles('dashboard-source/Dockerfile') != ''
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: dashboard-source
           file: dashboard-source/Dockerfile
