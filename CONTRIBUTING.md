@@ -53,12 +53,15 @@ npm run build
 
 ## Pull requests
 
+- **Issue-First Policy:** Every pull request must be linked to an approved GitHub Issue.
+- **Auto-Close Issues:** Always include closing keywords in your PR description (e.g. `Closes #123`, `Fixes #123`) so GitHub automatically closes the issue on merge.
 - Branch from `main`
-- Prefer Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`
+- Follow Conventional Commits: `feat:`, `fix:`, `docs:`, `chore:`
 - Keep PRs focused
-- Ensure CI passes
+- Ensure `make lint` passes locally before submitting
 - Do not commit `.env`, tokens, or customer data
 - Update docs when behavior or env vars change
+- See our complete workflow guide in [`.agents/skills/wp-next-contribution-workflow/SKILL.md`](.agents/skills/wp-next-contribution-workflow/SKILL.md)
 
 ## Code of conduct
 
