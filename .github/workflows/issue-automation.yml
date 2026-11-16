@@ -29,8 +29,12 @@ jobs:
             const labelsToAdd = new Set();
             const maintainers = ['EnamulHaq', 'noruzzamans', 'boom-devs'];
 
-            // 0. Auto-assign issue author or fallback to maintainers
-            if (action === 'opened' && (!issue.assignees || issue.assignees.length === 0)) {
+            // 0. Auto-assign issue author or fallback to maintainers (skip for open-source community issues)
+            const currentLabels = (issue.labels || []).map(l => l.name.toLowerCase());
+            const isCommunityIssue = currentLabels.some(l => l === 'good first issue' || l === 'help wanted') ||
+                                    /good\s*first\s*issue|help\s*wanted/i.test(title + ' ' + (issue.body || ''));
+
+            if (!isCommunityIssue && action === 'opened' && (!issue.assignees || issue.assignees.length === 0)) {
               if (maintainers.includes(author)) {
                 try {
                   await github.rest.issues.addAssignees({
