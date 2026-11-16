@@ -1,22 +1,49 @@
 # Security Policy
 
-## Supported versions
+## Supported Versions
 
-Security fixes are applied to the latest `main` release line and the most recent SemVer tag.
+We take the security of **WP Next Automation** seriously. Security updates are actively maintained and released for the following versions:
 
-## Reporting a vulnerability
+| Version | Supported | Status |
+| :--- | :--- | :--- |
+| `1.0.x` | ✅ Yes | Current Active Release |
+| `< 1.0.0`| ❌ No | Deprecated Pre-release |
 
-Please **do not** open a public GitHub issue for security problems.
+---
 
-Email the maintainers (or use GitHub Security Advisories on the repository) with:
+## Reporting a Vulnerability
 
-- Description of the issue
-- Steps to reproduce
-- Impact assessment
-- Whether you have a suggested fix
+If you discover a security vulnerability within WP Next Automation, please follow responsible disclosure guidelines. **Do not disclose security vulnerabilities in public GitHub issues, discussions, or pull requests.**
 
-We aim to acknowledge reports within 72 hours.
+### How to Report
 
-## Secrets
+1. **GitHub Private Vulnerability Reporting (Preferred):**  
+   Navigate to the repository's **Security** tab ➔ **Advisories** ➔ **Report a vulnerability**. This creates a confidential disclosure draft directly with the core maintainers.
 
-Never commit API tokens, PATs, Stripe keys, or `.env` files. If you accidentally push a secret, rotate it immediately and notify maintainers.
+2. **Direct Maintainer Contact:**  
+   If you cannot use GitHub Advisories, please email the security maintainers at:
+   - **`security@boomdevs.com`** or **`noruzzamanrubel@gmail.com`**
+   - Please include `[SECURITY] WP Next Automation Vulnerability Report` in the subject line.
+
+### What to Include in Your Report
+
+To help us triage and resolve the issue quickly, please provide:
+- A detailed description of the vulnerability and attack vector.
+- Clear, reproducible step-by-step instructions (or a minimal Proof of Concept).
+- Potential impact on hosted sites, control planes, or API credentials.
+- Any suggested remediations or mitigations, if available.
+
+### Response Timelines & SLA
+
+- **Initial Acknowledgment:** Within 24–48 hours of receipt.
+- **Triage & Severity Assessment:** Within 72 hours.
+- **Patch Development & Testing:** Priority based on CVSS score.
+- **Public Disclosure:** Coordinated after a patched release is published.
+
+---
+
+## Zero-Trust Secrets Management
+
+- **External Integrations:** Coolify API tokens, GitHub Personal Access Tokens (PATs), and Stripe API keys are stored encrypted at rest.
+- **Credential Hygiene:** Never commit `.env` files, production database dumps, or private keys to source control.
+- **Compromise Procedure:** If an API secret is inadvertently exposed in logs or commits, immediately revoke and regenerate the token from the relevant provider dashboard (Coolify, GitHub, Stripe).

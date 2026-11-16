@@ -1,0 +1,31 @@
+name: 💡 Feature Request
+description: Suggest an idea or enhancement for WP Next Automation
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement to WP Next Automation!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Use Case
+      description: Is your feature request related to a specific problem or workflow friction?
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution / Enhancement
+      description: Describe what you would like to see implemented.
+      placeholder: "Add support for..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions Considered
+      description: Have you considered any alternative workarounds or architectures?
+      placeholder: "Alternatively, we could..."

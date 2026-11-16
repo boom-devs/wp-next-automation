@@ -1,0 +1,70 @@
+name: 🐛 Bug Report
+description: Report an issue with the installer, Docker stack, or control plane runtime
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please ensure sensitive values (such as `APP_KEY`, passwords, Coolify tokens, or Stripe keys) are redacted from logs before submitting.
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what went wrong.
+      placeholder: Describe the problem...
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System / Host Platform
+      description: Where are you running the WP Next Automation installer or stack?
+      options:
+        - Ubuntu 24.04 LTS (VPS)
+        - Ubuntu 22.04 LTS (VPS)
+        - Debian 12 (Bookworm)
+        - macOS (Docker Desktop)
+        - Windows (WSL2 + Docker Desktop)
+        - Other Linux Distribution
+    validations:
+      required: true
+  - type: input
+    id: docker_version
+    attributes:
+      label: Docker & Compose Version
+      description: Output from `docker --version` and `docker compose version`
+      placeholder: "e.g. Docker Engine 27.x / Docker Compose v2.29"
+    validations:
+      required: true
+  - type: input
+    id: coolify_version
+    attributes:
+      label: Coolify PaaS Version (if relevant)
+      description: Version of Coolify connected in Admin -> Integrations
+      placeholder: "e.g. v4.0.0-beta.350 or N/A"
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Steps to Reproduce
+      description: Step-by-step instructions to reproduce the issue.
+      placeholder: |
+        1. Run `./install.sh`
+        2. Enter ...
+        3. See error ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen instead?
+      placeholder: The stack should initialize ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Log Output
+      description: Paste terminal output or Docker Compose logs (`docker compose logs portal --tail 50`). Ensure secrets are redacted!
+      render: shell
