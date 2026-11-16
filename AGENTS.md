@@ -49,7 +49,12 @@ wp-next-automation/
 - **Safe Escaping:** Dotenv values containing spaces, quotes, or special characters must be properly escaped using `escape_env_value()` in `lib/wizard.sh`.
 - **Never Commit Secrets:** `.env` and `.env.*` are strictly ignored by `.gitignore`. The template file `.env.template` must only contain dummy placeholder values.
 
-### 4. Verification Workflow
+### 4. Issue-First & Auto-Closing PR Workflow
+- **Issue-First Policy:** Never start work or create a PR without an open, approved GitHub Issue.
+- **GitHub Auto-Close Syntax:** Always link the issue in the PR description using `Closes #<issue_id>` (or `Fixes #<issue_id>` for bugs) so GitHub automatically closes the issue upon merge into `main`.
+- **Contribution Skill:** Follow the complete workflow guide documented in [`.agents/skills/wp-next-contribution-workflow/SKILL.md`](.agents/skills/wp-next-contribution-workflow/SKILL.md).
+
+### 5. Verification Workflow
 Before finalizing any modification or reporting completion to the user, you **must** execute:
 ```bash
 make lint
