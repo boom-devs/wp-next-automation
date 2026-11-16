@@ -21,6 +21,8 @@ Automate decoupled WordPress + Next.js provisioning on your own servers with zer
   <a href="#-components">Components</a> •
   <a href="#-integrations-guide">Integrations</a> •
   <a href="#-contributing">Contributing</a> •
+  <a href="#-support-the-project">Support ⭐</a> •
+  <a href="#-contributors">Contributors</a> •
   <a href="#-maintainers--credits">Maintainers</a> •
   <a href="#-license">License</a>
 </p>
@@ -217,17 +219,115 @@ Please see our [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_
 
 ---
 
+## ⭐ Support the Project
+
+If you find **WP Next Automation** valuable or use it in your projects, please consider giving it a star on GitHub! It takes just a second and helps the project gain visibility across the WordPress & open-source community, attract more contributors, and motivates ongoing active development.
+
+<p align="center">
+  <a href="https://github.com/boom-devs/wp-next-automation">
+    <img src="https://img.shields.io/badge/⭐_Star_on_GitHub-wp--next--automation-yellow?style=for-the-badge&logo=github" alt="Star on GitHub">
+  </a>
+</p>
+
+- **Star this repository** to bookmark it for future use.
+- **Share it** with fellow WordPress developers, agencies, and friends.
+- **Contribute** code, docs, or ideas to our open [Issues](https://github.com/boom-devs/wp-next-automation/issues).
+
+---
+
+<a id="contributors"></a>
+## 👥 Contributors
+
+Thank you to all the amazing people who contribute to WP Next Automation!
+
+<p align="center">
+  <a href="https://github.com/EnamulHaq">
+    <img src="https://avatars.githubusercontent.com/u/35990207?v=4" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="EnamulHaq" title="Md. Enamul Haq (@EnamulHaq)">
+  </a>
+  <a href="https://github.com/noruzzamans">
+    <img src="https://avatars.githubusercontent.com/u/46926901?v=4" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="noruzzamans" title="Md. Noruzzaman (@noruzzamans)">
+  </a>
+  <a href="https://github.com/mdrakibislam68">
+    <img src="https://avatars.githubusercontent.com/u/55364426?v=4" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="mdrakibislam68" title="Md Rakib Islam (@mdrakibislam68)">
+  </a>
+  <a href="https://github.com/ashr4f1arr2ad">
+    <img src="https://avatars.githubusercontent.com/u/60966676?v=4" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="ashr4f1arr2ad" title="Ashrafi Ar Raad (@ashr4f1arr2ad)">
+  </a>
+</p>
+
+Contributions of any kind are welcome! See our [Contributing Guide](CONTRIBUTING.md) to get started.
+
+---
+
 ## 👨‍💻 Maintainers & Credits
 
-**WP Next Automation** is maintained with ❤️ by **[BoomDevs](https://github.com/boom-devs)** and open-source contributors:
+<table width="100%">
+  <tbody>
+    <tr>
+      <td align="center" width="50%" valign="top">
+        <br>
+        <a href="https://github.com/EnamulHaq">
+          <img src="https://avatars.githubusercontent.com/EnamulHaq" alt="Md. Enamul Haq" width="110" height="110" style="border-radius: 50%;">
+        </a>
+        <br><br>
+        <h3 align="center">Md. Enamul Haq</h3>
+        <p align="center">
+          <strong>WordPress & PHP Backend Engineer</strong><br>
+          Core Architecture & Systems Engineering
+        </p>
+        <p align="center">
+          <a href="https://github.com/EnamulHaq" title="GitHub">
+            <img src="https://img.shields.io/badge/--181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+          </a>
+          <a href="https://profiles.wordpress.org/enamulhaq/" title="WordPress.org Profile">
+            <img src="https://img.shields.io/badge/--21759B?style=for-the-badge&logo=wordpress&logoColor=white" alt="WordPress Profile">
+          </a>
+        </p>
+        <br>
+      </td>
+      <td align="center" width="50%" valign="top">
+        <br>
+        <a href="https://github.com/noruzzamans">
+          <img src="https://avatars.githubusercontent.com/noruzzamans" alt="Md. Noruzzaman" width="110" height="110" style="border-radius: 50%;">
+        </a>
+        <br><br>
+        <h3 align="center">Md. Noruzzaman</h3>
+        <p align="center">
+          <strong>Senior WordPress Systems & Core Engineer</strong><br>
+          WordPress 7.2 Release Squad (Test Lead) · Core Contributor (6.6–7.2)
+        </p>
+        <p align="center">
+          <a href="https://github.com/noruzzamans" title="GitHub">
+            <img src="https://img.shields.io/badge/--181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+          </a>
+          <a href="https://linkedin.com/in/noruzzaman" title="LinkedIn">
+            <img src="https://img.shields.io/badge/--0A66C2?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xOSAwaC0xNGMtMi43NjIgMC01IDIuMjM4LTUgNXYxNGMwIDIuNzYyIDIuMjM4IDUgNSA1aDE0YzIuNzYyIDAgNS0yLjIzOCA1LTV2LTE0YzAtMi43NjItMi4yMzgtNS01LTV6bS0xMSAxOWgtM3YtMTBoM3YxMHptLTEuNS0xMS4yNjhjLS45NjYgMC0xLjc1LS43OS0xLjc1LTEuNzY0cy43ODQtMS43NjQgMS43NS0xLjc2NCAxLjc1Ljc5IDEuNzUgMS43NjQtLjc4MyAxLjc2NC0xLjc1IDEuNzY0em0xMy41IDExLjI2OGgtM3YtNS42MDRjMC0zLjM2OC00LTMuMTEzLTQtMHY1LjYwNGgtM3YtMTBoM3YxLjMwOWMxLjM5Ni0yLjU4NiA3LTIuNzc3IDcgMi40NzZ2Ni4yMTV6Ii8+PC9zdmc+" alt="LinkedIn">
+          </a>
+          <a href="https://x.com/Noruzzamanwp" title="X (Twitter)">
+            <img src="https://img.shields.io/badge/--000000?style=for-the-badge&logo=x&logoColor=white" alt="X (Twitter)">
+          </a>
+          <a href="https://profiles.wordpress.org/noruzzaman/" title="WordPress.org Profile">
+            <img src="https://img.shields.io/badge/--21759B?style=for-the-badge&logo=wordpress&logoColor=white" alt="WordPress Profile">
+          </a>
+        </p>
+        <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-- **[Md. Noruzzaman](https://github.com/noruzzamans)** — WordPress Core & Gutenberg Engineer | WordPress 7.2 Release Squad (Test Lead)
-- **[Md. Enamul Haq](https://github.com/EnamulHaq)** — Backend Architect & Core Systems Engineer
+<p align="center">
+  <a href="https://github.com/boom-devs" title="BoomDevs Organization">
+    <img src="https://img.shields.io/badge/Sponsored%20by-BoomDevs-0366d6?style=for-the-badge&logo=github&logoColor=white" alt="BoomDevs">
+  </a>
+</p>
 
-### Special Thanks
-- [Coolify](https://coolify.io) — The fantastic open-source self-hostable Heroku/Netlify alternative.
+### Special Credits
+- [Coolify](https://coolify.io) — The open-source, self-hosted PaaS infrastructure.
 - [WordPress](https://wordpress.org) — The world's open web CMS.
-- [Next.js](https://nextjs.org) — The React framework for the Web.
+- [Next.js](https://nextjs.org) — The React framework for high-performance frontends.
+- [Laravel Reverb](https://reverb.laravel.com/) — Blazing-fast real-time WebSocket server.
+- [Docker](https://www.docker.com/) — Container orchestration and service isolation.
 
 ---
 
