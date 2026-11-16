@@ -7,18 +7,47 @@ on:
 
 jobs:
   installer:
+    name: ShellCheck & Syntax Validation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Install shellcheck
-        run: sudo apt-get update && sudo apt-get install -y shellcheck
-      - name: Shellcheck install scripts
+
+      - name: ShellCheck install scripts
         run: shellcheck -x install.sh lib/wizard.sh
-      - name: Validate compose file
+
+      - name: Wizard bash syntax verification
+        run: bash -n install.sh && bash -n lib/wizard.sh
+
+      - name: Installer CLI execution test
+        run: ./install.sh --help
+
+  compose-validation:
+    name: Docker Compose Schema Validation
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        profile: [default, caddy, dev]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Prepare minimal test environment
         run: |
           cp .env.template .env
-          # Minimal placeholders so compose config resolves
           printf '\nAPP_URL=https://api.example.com\nFRONTEND_URL=https://app.example.com\nDB_PASSWORD=ci\n' >> .env
-          docker compose -f docker-compose.yml config >/dev/null
-      - name: Wizard helpers syntax
-        run: bash -n install.sh && bash -n lib/wizard.sh
+
+      - name: Validate Default Compose Config
+        if: matrix.profile == 'default'
+        run: docker compose -f docker-compose.yml config >/dev/null
+
+      - name: Validate Caddy Profile Compose Config
+        if: matrix.profile == 'caddy'
+        run: COMPOSE_PROFILES=caddy docker compose -f docker-compose.yml config >/dev/null
+
+      - name: Validate Development Compose Override
+        if: matrix.profile == 'dev'
+        run: |
+          if [ -f docker-compose.dev.yml ]; then
+            docker compose -f docker-compose.yml -f docker-compose.dev.yml config >/dev/null
+          else
+            echo "Skipping dev override on base branch."
+          fi
