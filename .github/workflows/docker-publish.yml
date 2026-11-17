@@ -47,7 +47,7 @@ jobs:
         continue-on-error: true
 
       - name: Set up QEMU (Multi-Arch)
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         with:
           platforms: linux/amd64,linux/arm64
 
@@ -102,7 +102,7 @@ jobs:
         continue-on-error: true
 
       - name: Set up QEMU (Multi-Arch)
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         with:
           platforms: linux/amd64,linux/arm64
 
