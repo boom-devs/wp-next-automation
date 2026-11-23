@@ -173,6 +173,7 @@ Once the installer finishes and you log in to the dashboard at `FRONTEND_URL`:
 ---
 
 ## 🛠️ Useful Commands
+If something fails, start with the [Troubleshooting Guide](docs/TROUBLESHOOTING.md) before changing anything.
 
 ```bash
 # Check service health
