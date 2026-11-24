@@ -254,6 +254,9 @@ Thank you to all the amazing people who contribute to WP Next Automation!
   <a href="https://github.com/ashr4f1arr2ad">
     <img src="https://avatars.githubusercontent.com/u/60966676?v=4" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="ashr4f1arr2ad" title="Ashrafi Ar Raad (@ashr4f1arr2ad)">
   </a>
+  <a href="https://github.com/haseemajaz">
+    <img src="https://avatars.githubusercontent.com/u/41672065?v=4" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="haseemajaz" title="Haseem Ajaz (@haseemajaz)">
+  </a>
 </p>
 
 Contributions of any kind are welcome! See our [Contributing Guide](CONTRIBUTING.md) to get started.
