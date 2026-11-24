@@ -249,6 +249,8 @@ docker compose up -d
 ---
 
 ## 7. Troubleshooting
+For the full guide with symptoms, causes, and fixes, see
+[TROUBLESHOOTING.md](./TROUBLESHOOTING.md). The short version:
 
 | Problem | Fix |
 |---------|-----|
@@ -284,7 +286,8 @@ Browser → Dashboard (FRONTEND_URL)
 
 - [ENVIRONMENT.md](./ENVIRONMENT.md) — env variable reference  
 - Portal backend README — Integrations deep dive  
-- Connector plugin README — manual install  
+- Connector plugin README — manual install
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) — port conflicts, firewall, Docker, Coolify, GitHub, database reset, connector sync
 
 ## License
 
