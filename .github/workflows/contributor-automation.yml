@@ -1,0 +1,128 @@
+name: Contributor Attribution
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  attribute-contributor:
+    name: Attribute New Contributor
+    if: github.event.pull_request.merged == true && !github.event.pull_request.user.bot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Update Contributor List
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+
+            console.log(`Processing merged PR #${pr.number} by @${author}`);
+
+            // 1. Read .all-contributorsrc
+            let contributorsData = { contributors: [] };
+            if (fs.existsSync('.all-contributorsrc')) {
+              contributorsData = JSON.parse(fs.readFileSync('.all-contributorsrc', 'utf8'));
+            }
+
+            const existingLogins = new Set(contributorsData.contributors.map(c => c.login.toLowerCase()));
+            if (existingLogins.has(author.toLowerCase())) {
+              console.log(`Contributor @${author} is already attributed in .all-contributorsrc.`);
+              return;
+            }
+
+            // 2. Fetch contributor profile info from GitHub API
+            const userResponse = await github.rest.users.getByUsername({ username: author });
+            const user = userResponse.data;
+            const displayName = user.name || author;
+            const avatarUrl = user.avatar_url;
+            const profileUrl = user.html_url;
+
+            // Determine contribution types based on PR files
+            const filesResponse = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+
+            const contributionTypes = new Set();
+            for (const file of filesResponse.data) {
+              const filename = file.filename.toLowerCase();
+              if (filename.endsWith('.md') || filename.startsWith('docs/')) {
+                contributionTypes.add('doc');
+              } else if (filename.startsWith('.github/')) {
+                contributionTypes.add('infra');
+              } else if (filename.endsWith('.sh') || filename.includes('docker') || filename.includes('caddy')) {
+                contributionTypes.add('code');
+              } else {
+                contributionTypes.add('code');
+              }
+            }
+
+            if (contributionTypes.size === 0) contributionTypes.add('code');
+
+            // 3. Append to .all-contributorsrc
+            contributorsData.contributors.push({
+              login: author,
+              name: displayName,
+              avatar_url: avatarUrl,
+              profile: profileUrl,
+              contributions: Array.from(contributionTypes)
+            });
+
+            fs.writeFileSync('.all-contributorsrc', JSON.stringify(contributorsData, null, 2) + '\n', 'utf8');
+            console.log(`Added @${author} to .all-contributorsrc.`);
+
+            // 4. Update README.md contributors grid
+            if (fs.existsSync('README.md')) {
+              let readme = fs.readFileSync('README.md', 'utf8');
+              const avatarSnippet = `  <a href="${profileUrl}">\n    <img src="${avatarUrl}" width="64" height="64" style="border-radius: 50%; margin: 6px;" alt="${author}" title="${displayName} (@${author})">\n  </a>\n`;
+
+              // Insert right before </p> in the Contributors section
+              const contributorsMarker = '<a id="contributors"></a>';
+              const markerIdx = readme.indexOf(contributorsMarker);
+              if (markerIdx !== -1) {
+                const closePIdx = readme.indexOf('</p>', markerIdx);
+                if (closePIdx !== -1) {
+                  readme = readme.slice(0, closePIdx) + avatarSnippet + readme.slice(closePIdx);
+                  fs.writeFileSync('README.md', readme, 'utf8');
+                  console.log(`Added @${author} avatar to README.md.`);
+                }
+              }
+            }
+
+            // 5. Post celebratory thank-you comment on the PR
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `🎉 Congratulations @${author}! Your pull request has been merged, and you have been added to our official [Contributors Showcase](https://github.com/${context.repo.owner}/${context.repo.repo}#-contributors)! Thank you for contributing to WP Next Automation! 🚀`
+              });
+            } catch (err) {
+              console.log(`Could not post celebratory comment: ${err.message}`);
+            }
+
+      - name: Commit and Push Attribution
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .all-contributorsrc README.md
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "docs(contributors): celebrate @${{ github.event.pull_request.user.login }} in contributor showcase [skip ci]"
+            git push origin main
+          fi
